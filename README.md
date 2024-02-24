@@ -37,7 +37,7 @@ So basically I had pre-requisite knowledge in Machine learning, but I learnt a l
 
 Like I was aware of Matplotlib but wasnt aware of Librosa's waveform feature.
 
-I also learnt how to make filters in my python(I only learnt about them in theory thanks to an Electrical Engineering course)
+I also learnt how to make filters in python(I only learnt about them in theory thanks to an Electrical Engineering course)
 
 Also Quarto is just something I didnt know and glad through this project I learnt about it, because it really does wonders. Definetly going to use in my future projects.
 
