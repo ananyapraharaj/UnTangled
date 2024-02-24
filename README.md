@@ -8,6 +8,9 @@
 
 - [Vanshika Jain](https://www.github.com/26vanshika)
 
+## Navigation
+I am not sure how do we exactly do this part but the SRIPTask-2.pdf is the quarto file and SRIPTask-2.ipynb is the jupyter notebook.
+
 
 ## Roadmap
 The steps that I followed for this mini-project were as follows:
