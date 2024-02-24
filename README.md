@@ -7,6 +7,8 @@
 ## Authors
 
 - [Vanshika Jain](https://www.github.com/26vanshika)
+  Intern ID - 21548248
+  Sophomore in Electrical Engineering at NIT Rourkela.
 
 ## Navigation
 I am not sure how do we exactly do this part but the SRIPTask-2.pdf is the quarto file and SRIPTask-2.ipynb is the jupyter notebook.
