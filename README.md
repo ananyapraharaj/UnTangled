@@ -10,9 +10,36 @@
   Intern ID - 21548248
   Sophomore in Electrical Engineering at NIT Rourkela.
 
-## Navigation
-I am not sure how do we exactly do this part but the SRIPTask-2.pdf is the quarto file and SRIPTask-2.ipynb is the jupyter notebook.
+## Navigation and Installation
+You can do the below installations or just view the files from the repository directly. Both the python file(SRIPTask-2.ipynb) and the quarto file(SRIPTask-2-2.pdf) are present.
 
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/26vanshika/SRIP24.git
+   cd SRIP24
+
+2. **Set up a Virtual Environment**
+   ```bash
+    python -m venv venv
+    # For mac
+    source venv/bin/activate
+    # For Windows
+    use ".\venv\Scripts\activate"
+
+4. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+
+6. **Run Jupyter Notebook**
+   ```bash
+   jupyter notebook
+
+7. **Run my file**
+   In your web browser, go to the URL displayed in the terminal http://localhost:8888/ . Open main Jupyter Notebook file SRIPTask-2.ipynb.
+   
+9. **Quarto file**
+    ```bash
+   quarto render SRIPTask-2.ipynb --to pdf
 
 ## Roadmap
 The steps that I followed for this mini-project were as follows:
