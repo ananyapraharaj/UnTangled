@@ -1,13 +1,12 @@
 import os
 import requests
-from dotenv import load_dotenv  # Import dotenv
+from dotenv import load_dotenv
 from datetime import datetime
 from typing import TypedDict, Annotated, List
 from langgraph.graph import StateGraph, END
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
-
 
 load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -31,7 +30,7 @@ class PlannerState(TypedDict):
 # Initialize LLM securely
 llm = ChatGroq(
     temperature=0,
-    groq_api_key=GROQ_API_KEY,  # Uses environment variable
+    groq_api_key=GROQ_API_KEY,
     model_name="llama-3.3-70b-versatile",
 )
 
@@ -50,7 +49,7 @@ itinerary_prompt = ChatPromptTemplate.from_messages(
 )
 
 
-# 1️⃣ Get City Input
+# Get City Input
 def input_city(state: PlannerState) -> PlannerState:
     city = input("Enter the city you want to visit: ")
     return {
@@ -60,7 +59,7 @@ def input_city(state: PlannerState) -> PlannerState:
     }
 
 
-# 2️⃣ Get Interests
+# Get Interests
 def input_interest(state: PlannerState) -> PlannerState:
     interests = input(f"Enter your interests for {state['city']} (comma-separated): ")
     return {
@@ -71,7 +70,7 @@ def input_interest(state: PlannerState) -> PlannerState:
     }
 
 
-# 3️⃣ Get Budget, People, From Date, To Date
+# Get Budget, People, From Date, To Date
 def input_details(state: PlannerState) -> PlannerState:
     budget = int(input("Enter your budget in INR: "))
     people = int(input("Enter the number of people: "))
@@ -93,67 +92,53 @@ def input_details(state: PlannerState) -> PlannerState:
     }
 
 
-# 4️⃣ Fetch Weather for Trip Duration
+# Fetch Weather for Trip Duration
 def fetch_weather(state: PlannerState) -> PlannerState:
     print(
         f"Fetching weather details for {state['city']} from {state['from_date']} to {state['to_date']}..."
     )
 
     try:
-        # Get city coordinates
         geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={state['city']}&count=1"
         geo_response = requests.get(geo_url, timeout=5)
         geo_data = geo_response.json()
 
-        if "results" in geo_data and len(geo_data["results"]) > 0:
-            lat = geo_data["results"][0]["latitude"]
-            lon = geo_data["results"][0]["longitude"]
-
-            # Fetch weather data for the trip duration
+        if "results" in geo_data and geo_data["results"]:
+            lat, lon = (
+                geo_data["results"][0]["latitude"],
+                geo_data["results"][0]["longitude"],
+            )
             url = f"https://archive-api.open-meteo.com/v1/archive?latitude={lat}&longitude={lon}&start_date={state['from_date']}&end_date={state['to_date']}&daily=temperature_2m_max,temperature_2m_min&timezone=auto"
             response = requests.get(url, timeout=5)
             data = response.json()
 
             if "daily" in data:
-                max_temps = data["daily"]["temperature_2m_max"]
-                min_temps = data["daily"]["temperature_2m_min"]
-
-                avg_max_temp = round(sum(max_temps) / len(max_temps), 1)
-                avg_min_temp = round(sum(min_temps) / len(min_temps), 1)
-
+                avg_max_temp = round(
+                    sum(data["daily"]["temperature_2m_max"])
+                    / len(data["daily"]["temperature_2m_max"]),
+                    1,
+                )
+                avg_min_temp = round(
+                    sum(data["daily"]["temperature_2m_min"])
+                    / len(data["daily"]["temperature_2m_min"]),
+                    1,
+                )
                 weather_info = (
                     f"Avg Max Temp: {avg_max_temp}°C, Avg Min Temp: {avg_min_temp}°C"
                 )
             else:
                 weather_info = ""
-
         else:
             weather_info = ""
-
-    except (requests.RequestException, KeyError, ValueError):
+    except:
         print("⚠️ Weather API failed. Skipping weather data.")
         weather_info = ""
 
-    if weather_info:
-        print(
-            f"🌤 Weather for {state['city']} from {state['from_date']} to {state['to_date']}: {weather_info}"
-        )
-
-    return {
-        **state,
-        "weather": weather_info,
-        "messages": state["messages"]
-        + ([HumanMessage(content=f"Weather: {weather_info}")] if weather_info else []),
-    }
+    return {**state, "weather": weather_info}
 
 
-# 5️⃣ Generate Itinerary
+# Generate Itinerary
 def create_itinerary(state: PlannerState) -> PlannerState:
-    print(
-        f"Generating an itinerary for {state['city']} with interests: {', '.join(state['interests'])}, "
-        f"budget: {state['budget']} INR, for {state['people']} people, from {state['from_date']} to {state['to_date']}."
-    )
-
     response = llm.invoke(
         itinerary_prompt.format_messages(
             city=state["city"],
@@ -162,41 +147,29 @@ def create_itinerary(state: PlannerState) -> PlannerState:
             people=state["people"],
             from_date=state["from_date"],
             to_date=state["to_date"],
-            weather=state["weather"] if state["weather"] else "N/A",
+            weather=state["weather"] or "N/A",
         )
     )
 
-    print("\n📝 Final Itinerary:\n")
-    print(response.content)
-
-    return {
-        **state,
-        "messages": state["messages"] + [AIMessage(content=response.content)],
-        "itinerary": response.content,
-    }
+    print("\n📝 Final Itinerary:\n", response.content)
+    return {**state, "itinerary": response.content}
 
 
-# 🚀 Define Workflow
-workflow = StateGraph(PlannerState)
-
-workflow.add_node("input_city", input_city)
-workflow.add_node("input_interest", input_interest)
-workflow.add_node("input_details", input_details)
-workflow.add_node("fetch_weather", fetch_weather)
-workflow.add_node("create_itinerary", create_itinerary)
-
-workflow.set_entry_point("input_city")
-workflow.add_edge("input_city", "input_interest")
-workflow.add_edge("input_interest", "input_details")
-workflow.add_edge("input_details", "fetch_weather")
-workflow.add_edge("fetch_weather", "create_itinerary")
-workflow.add_edge("create_itinerary", END)
-
-app = workflow.compile()
+# Chatbot Function
+def chat_with_bot(state: PlannerState) -> None:
+    print("\n💬 Chatbot: Ask me anything about your trip! (Type 'exit' to quit)")
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == "exit":
+            break
+        chat_response = llm.invoke(
+            f"Previous itinerary: {state['itinerary']}\nUser query: {user_input}"
+        )
+        print(f"Chatbot: {chat_response.content}")
 
 
-# Function to Run Travel Planner
-def travel_planner():
+# Run the program
+if __name__ == "__main__":
     state = {
         "messages": [],
         "city": "",
@@ -208,10 +181,9 @@ def travel_planner():
         "weather": "",
         "itinerary": "",
     }
-    for output in app.stream(state):
-        pass
-
-
-# 🎯 Run the Travel Planner
-if __name__ == "__main__":
-    travel_planner()
+    state = input_city(state)
+    state = input_interest(state)
+    state = input_details(state)
+    state = fetch_weather(state)
+    state = create_itinerary(state)
+    chat_with_bot(state)
