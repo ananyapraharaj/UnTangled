@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Tangled Travels</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+
 <body>
     <header>
         <div class="logo">UnTangled</div>
@@ -15,19 +17,25 @@
                 <li><a href="{{ url_for('itinerary_page') }}">Generate Itinerary</a></li>
                 <li><a href="{{ url_for('signup_page') }}">Sign Up</a></li>
                 <li><a href="{{ url_for('login_page') }}">Log In</a></li>
-
             </ul>
         </nav>
     </header>
+
     <main>
         <section class="hero">
-            <h1>Embark on Your Enchanted Journey</h1>
-            <p>Discover personalized travel itineraries inspired by the magic of Tangled.</p>
-            <a href="{{ url_for('signup_page') }}" class="cta-button">Get Started</a>
+            <div class="hero-content">
+                <h1>Embark on Your Enchanted Journey</h1>
+                <p>Discover personalized travel itineraries with UnTangled.</p>
+                <a href="{{ url_for('signup_page') }}" class="cta-button">Get Started</a>
+            </div>
         </section>
+
+
     </main>
+
     <footer>
         <p>&copy; 2025 UnTangled. All rights reserved.</p>
     </footer>
 </body>
+
 </html>

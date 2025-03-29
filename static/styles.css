@@ -3,14 +3,22 @@
 
 /* Root Variables */
 :root {
-    --deep-plum: #5A2D82; /* Deep mystical purple */
-    --royal-violet: #7B3FBF; /* Rich, royal purple */
-    --electric-violet: #9B30FF; /* Bright electric purple */
-    --soft-lavender: #D8BFD8; /* Soft pastel purple */
-    --misty-lilac: #E6E6FA; /* Ethereal, light purple */
-    --pale-ivory: #FAF8F5; /* Soft neutral background */
-    --shadow-gray: #6D6A75; /* Text contrast */
-    --pure-white: #FFFFFF; /* Crisp white for buttons */
+    --deep-plum: #5A2D82;
+    /* Deep mystical purple */
+    --royal-violet: #7B3FBF;
+    /* Rich, royal purple */
+    --electric-violet: #9B30FF;
+    /* Bright electric purple */
+    --soft-lavender: #D8BFD8;
+    /* Soft pastel purple */
+    --misty-lilac: #E6E6FA;
+    /* Ethereal, light purple */
+    --pale-ivory: #FAF8F5;
+    /* Soft neutral background */
+    --shadow-gray: #6D6A75;
+    /* Text contrast */
+    --pure-white: #FFFFFF;
+    /* Crisp white for buttons */
 }
 
 /* Global Styles */
@@ -23,20 +31,24 @@ body {
     box-sizing: border-box;
 }
 
-/* Header */
+/* 🌟 Header (Now on All Pages) */
 header {
-    background: linear-gradient(to bottom, var(--royal-violet), var(--soft-lavender));
-    padding: 1.2rem 0;
+    background: linear-gradient(to bottom, var(--deep-plum), var(--royal-violet));
+    padding: 2.5rem 0;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    position: relative;
 }
 
+/* Logo Style */
 .logo {
-    color: var(--electric-violet);
-    font-size: 2.8rem;
+    color: var(--pure-white);
+    font-size: 3.2rem;
     font-family: 'Playfair Display', serif;
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(155, 48, 255, 0.6);
+    letter-spacing: 1.2px;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    font-weight: 700;
 }
 
 /* Navigation */
@@ -73,7 +85,7 @@ main {
 
 /* Forms */
 .form-container {
-    background: var(--soft-lavender);
+    background: var(--misty-lilac);
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
@@ -105,7 +117,7 @@ main {
     border: 1px solid var(--deep-plum);
     border-radius: 8px;
     font-size: 1rem;
-    background: var(--misty-lilac);
+    background: var(--pure-white);
     color: var(--shadow-gray);
 }
 
