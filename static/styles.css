@@ -1,22 +1,23 @@
-/* styles.css */
-
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato&display=swap');
 
 /* Root Variables */
 :root {
-    --muted-gold: #D4AF37; /* Represents Rapunzel's hair */
-    --lavender-gray: #C4C3D0; /* Reflects the kingdom's hues */
-    --deep-plum: #673147; /* Adds depth and sophistication */
-    --soft-beige: #F5F5DC; /* Neutral background for cleanliness */
-    --charcoal: #36454F; /* Ensures readability */
+    --deep-plum: #5A2D82; /* Deep mystical purple */
+    --royal-violet: #7B3FBF; /* Rich, royal purple */
+    --electric-violet: #9B30FF; /* Bright electric purple */
+    --soft-lavender: #D8BFD8; /* Soft pastel purple */
+    --misty-lilac: #E6E6FA; /* Ethereal, light purple */
+    --pale-ivory: #FAF8F5; /* Soft neutral background */
+    --shadow-gray: #6D6A75; /* Text contrast */
+    --pure-white: #FFFFFF; /* Crisp white for buttons */
 }
 
 /* Global Styles */
 body {
     font-family: 'Lato', sans-serif;
-    background-color: var(--soft-beige);
-    color: var(--charcoal);
+    background-color: var(--misty-lilac);
+    color: var(--shadow-gray);
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -24,15 +25,18 @@ body {
 
 /* Header */
 header {
-    background-color: var(--deep-plum);
-    padding: 1rem 0;
+    background: linear-gradient(to bottom, var(--royal-violet), var(--soft-lavender));
+    padding: 1.2rem 0;
     text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .logo {
-    color: var(--muted-gold);
-    font-size: 2.5rem;
+    color: var(--electric-violet);
+    font-size: 2.8rem;
     font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(155, 48, 255, 0.6);
 }
 
 /* Navigation */
@@ -50,14 +54,15 @@ header {
 
 .nav-links a {
     text-decoration: none;
-    color: var(--soft-beige);
+    color: var(--soft-lavender);
     font-size: 1.2rem;
-    transition: color 0.3s ease;
+    transition: opacity 0.3s ease, text-shadow 0.3s ease;
+    font-weight: 500;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-    color: var(--muted-gold);
+.nav-links a:hover {
+    opacity: 0.8;
+    text-shadow: 0 0 5px var(--electric-violet);
 }
 
 /* Main Content */
@@ -68,11 +73,11 @@ main {
 
 /* Forms */
 .form-container {
-    background-color: var(--lavender-gray);
+    background: var(--soft-lavender);
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    max-width: 420px;
     margin: 2rem auto;
 }
 
@@ -82,6 +87,7 @@ main {
     font-family: 'Playfair Display', serif;
 }
 
+/* Input Fields */
 .form-group {
     margin-bottom: 1.5rem;
     text-align: left;
@@ -90,40 +96,49 @@ main {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--charcoal);
+    color: var(--shadow-gray);
 }
 
 .form-group input {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--deep-plum);
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 1rem;
-    background-color: var(--soft-beige);
-    color: var(--charcoal);
+    background: var(--misty-lilac);
+    color: var(--shadow-gray);
 }
 
+/* ✨ White Magical Button */
 .form-button {
-    background-color: var(--deep-plum);
-    color: var(--soft-beige);
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
-    font-size: 1.2rem;
+    background: var(--pure-white);
+    color: var(--deep-plum);
+    border: 2px solid var(--deep-plum);
+    padding: 0.8rem 1.8rem;
+    border-radius: 12px;
+    font-size: 1.3rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.4s ease-in-out;
+    font-weight: 600;
+    position: relative;
+    box-shadow: 0 0 12px rgba(90, 45, 130, 0.2);
 }
 
+/* ✨ Hover Glow Effect */
 .form-button:hover {
-    background-color: var(--muted-gold);
-    color: var(--charcoal);
+    background: var(--pure-white);
+    color: var(--electric-violet);
+    border-color: var(--electric-violet);
+    box-shadow: 0 0 15px rgba(155, 48, 255, 0.6);
+    transform: scale(1.05);
 }
 
 /* Footer */
 footer {
-    background-color: var(--deep-plum);
-    color: var(--soft-beige);
+    background: var(--royal-violet);
+    color: var(--pale-ivory);
     text-align: center;
     padding: 1rem 0;
     margin-top: 2rem;
+    font-size: 1.1rem;
 }
