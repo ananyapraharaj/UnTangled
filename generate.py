@@ -1,7 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import TypedDict, Annotated, List
 from langgraph.graph import StateGraph, END
 from langchain_core.messages import HumanMessage, AIMessage
@@ -24,6 +24,7 @@ class PlannerState(TypedDict):
     to_date: str
     weather: str
     itinerary: str
+    comments: str
 
 # Initialize LLM securely
 llm = ChatGroq(
@@ -38,10 +39,10 @@ itinerary_prompt = ChatPromptTemplate.from_messages(
         (
             "system",
             "You are a helpful travel assistant. Create a travel itinerary for {city} based on "
-            "the user's interests: {interests}. The user has a budget of {budget} INR each whats for {people} people, "
+            "the user's interests: {interests}. The user has a budget of {budget} INR each for {people} people, "
             "traveling from {from_date} to {to_date}. Provide a structured plan including recommended places, "
             "food options, and local experiences. If available, consider the weather: {weather}. "
-            "Include transportation details too.",
+            "Include transportation details too. Consider additional comments: {comments}"
         ),
         ("human", "Create an itinerary for my trip."),
     ]
@@ -83,6 +84,11 @@ def input_details(state: PlannerState) -> PlannerState:
             )
         ],
     }
+
+# Get Additional Comments
+def input_comments(state: PlannerState) -> PlannerState:
+    comments = input("Enter any additional comments or preferences for your trip: ")
+    return {**state, "comments": comments}
 
 # Fetch Weather for Trip Duration
 def fetch_weather(state: PlannerState) -> PlannerState:
@@ -136,6 +142,7 @@ def create_itinerary(state: PlannerState) -> PlannerState:
             from_date=state["from_date"],
             to_date=state["to_date"],
             weather=state["weather"] or "N/A",
+            comments=state["comments"]
         )
     )
     print("\n Final Itinerary:\n", response.content)
@@ -152,10 +159,11 @@ def chat_with_bot(state: PlannerState) -> None:
         print(f"Chatbot: {chat_response.content}")
 
 if __name__ == "__main__":
-    state = {"messages": [], "city": "", "interests": [], "budget": 0, "people": 0, "from_date": "", "to_date": "", "weather": "", "itinerary": ""}
+    state = {"messages": [], "city": "", "interests": [], "budget": 0, "people": 0, "from_date": "", "to_date": "", "weather": "", "itinerary": "", "comments": ""}
     state = input_city(state)
     state = input_interest(state)
     state = input_details(state)
+    state = input_comments(state)
     state = fetch_weather(state)
     state = create_itinerary(state)
     chat_with_bot(state)
