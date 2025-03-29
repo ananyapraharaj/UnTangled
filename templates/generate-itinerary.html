@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itinerary Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         .container {
             background: var(--soft-beige);
@@ -102,7 +103,7 @@
             <input type="number" id="budget" required min="1000" step="1000">
 
             <label for="people">Number of People:</label>
-            <input type="number" id="people" required>
+            <input type="number" id="people" required min="1" step="1">
 
             <label for="from_date">Start Date:</label>
             <input type="date" id="from_date" required>
@@ -118,6 +119,8 @@
 
         <div id="output" class="itinerary-container"></div>
 
+        <button id="downloadPdf" style="display: none; margin-top: 15px;">Download Itinerary as PDF</button>
+        
         <h2>Chat with the Travel Assistant</h2>
         <div id="chatbox">
             <input type="text" id="userMessage" placeholder="Ask about your trip...">
@@ -177,11 +180,73 @@
                 }).join("");
 
                 document.getElementById("output").innerHTML = `<h3>Your Itinerary:</h3>${formattedItinerary}`;
+                document.getElementById("downloadPdf").style.display = "block";
+
             } catch (error) {
                 document.getElementById("output").innerHTML = `<p>Error generating itinerary. Please try again.</p>`;
                 console.error("Itinerary generation error:", error);
             }
         });
+
+        document.getElementById("downloadPdf").addEventListener("click", function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ unit: "mm", format: "a4" });
+
+            const deepPlum = "#4B0082"; // Purple
+            const black = "#000000";
+
+            let yPos = 20; // Start position for text after header
+            const pageHeight = doc.internal.pageSize.height;
+            const marginX = 10;
+
+            // Add title with purple background
+            doc.setFillColor(deepPlum);
+            doc.rect(0, 0, doc.internal.pageSize.width, 15, "F"); // Purple header background
+            doc.setFont("times", "bold");
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(18);
+            doc.text("OmTours", marginX, 10);
+
+            // Reset text color for content
+            doc.setTextColor(black);
+            doc.setFont("times", "normal");
+            doc.setFontSize(12);
+
+            function addWrappedText(text, x, y, maxWidth, lineHeight) {
+                const lines = doc.splitTextToSize(text, maxWidth);
+                lines.forEach(line => {
+                    if (y + lineHeight > pageHeight - 10) {
+                        doc.addPage();
+                        doc.setFillColor(deepPlum);
+                        doc.rect(0, 0, doc.internal.pageSize.width, 15, "F");
+                        doc.setTextColor(255, 255, 255);
+                        doc.setFontSize(18);
+                        doc.text("OmTours", marginX, 10);
+                        doc.setTextColor(black);
+                        doc.setFontSize(12);
+                        y = 20; // Reset position after header
+                    }
+                    doc.text(line, x, y);
+                    y += lineHeight;
+                });
+                return y;
+            }
+
+            // Get the itinerary text
+            const itineraryItems = document.querySelectorAll(".itinerary-item");
+            let itineraryText = "";
+            itineraryItems.forEach(item => {
+                itineraryText += item.innerText + "\n\n";
+            });
+
+            // Add the itinerary content
+            yPos = addWrappedText(itineraryText, marginX, yPos, 180, 7);
+
+            // Save the PDF
+            doc.save("Itinerary_OmTours.pdf");
+        });
+
+
 
         async function sendMessage() {
             const userMessage = document.getElementById("userMessage").value.trim();
