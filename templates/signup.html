@@ -4,25 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - UnTangled</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">UnTangled</div>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="generate-itinerary.html">Generate Itinerary</a></li>
-                <li><a href="explore.html">Explore</a></li>
-                <li><a href="signup.html" class="active">Sign Up</a></li>
-                <li><a href="login.html">Log In</a></li>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('itinerary_page') }}">Generate Itinerary</a></li>
+                <li><a href="{{ url_for('signup_page') }}" class="active">Sign Up</a></li>
+                <li><a href="{{ url_for('login_page') }}">Log In</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <section class="form-container">
             <h2>Create Your Account</h2>
-            <form action="YOUR_BACKEND_SIGNUP_ENDPOINT" method="POST">
+            <form action="{{ url_for('signup_page') }}" method="POST">
                 <div class="form-group">
                     <label for="signup-name">Full Name</label>
                     <input type="text" id="signup-name" name="name" required>
