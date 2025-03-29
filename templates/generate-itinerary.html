@@ -76,16 +76,29 @@
             color: var(--deep-plum);
         }
 
-        #chatbox {
-            margin-top: 20px;
+        #chatContainer {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            height: 300px; /* Set a fixed height for scrolling */
+            border: 2px solid var(--muted-gold);
+            border-radius: 10px;
+            padding: 10px;
+            background-color: var(--soft-beige);
+            overflow-y: auto; /* Enables scrolling when messages exceed container height */
         }
 
         #chatOutput {
-            margin-top: 15px;
-            text-align: left;
+            flex-grow: 1; /* Takes up all available space */
+            overflow-y: auto; /* Enable scrolling */
+            padding-bottom: 10px;
         }
+
+        #chatbox {
+            display: flex;
+            gap: 10px;
+            align-items: center; /* Keep input and button aligned */
+        }
+
     </style>
 </head>
 <body>
@@ -122,11 +135,14 @@
         <button id="downloadPdf" style="display: none; margin-top: 15px;">Download Itinerary as PDF</button>
         
         <h2>Chat with the Travel Assistant</h2>
-        <div id="chatbox">
-            <input type="text" id="userMessage" placeholder="Ask about your trip...">
-            <button onclick="sendMessage()">Send</button>
+        <div id="chatContainer">
+            <div id="chatOutput"></div> <!-- This is where messages will be displayed -->
+            <div id="chatbox">
+                <input type="text" id="userMessage" placeholder="Ask about your trip...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
         </div>
-        <div id="chatOutput"></div>
+
     </div>
 
     <script>
@@ -258,21 +274,35 @@
                 alert("Please generate an itinerary first.");
                 return;
             }
-            document.getElementById("chatOutput").innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+
+            const chatOutput = document.getElementById("chatOutput");
+
+            // Append user's message
+            chatOutput.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+
             try {
                 const response = await fetch("/api/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message: userMessage, itinerary: generatedItinerary })
                 });
+
                 const data = await response.json();
-                document.getElementById("chatOutput").innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+
+                // Append bot's reply
+                chatOutput.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+
+                // Auto-scroll to the latest message
+                chatOutput.scrollTop = chatOutput.scrollHeight;
+
+                // Clear input field
                 document.getElementById("userMessage").value = "";
             } catch (error) {
-                document.getElementById("chatOutput").innerHTML += `<p><strong>Bot:</strong> Error responding. Please try again.</p>`;
+                chatOutput.innerHTML += `<p><strong>Bot:</strong> Error responding. Please try again.</p>`;
                 console.error("Chatbot error:", error);
             }
         }
+
 
     </script>
 </body>
