@@ -31,7 +31,7 @@ itinerary_prompt = ChatPromptTemplate.from_messages(
             "from {from_date} to {to_date} for {people} people with a budget of {budget} INR each."
             "Consider the weather as well."
             "Include start time of the activities in the format: 'HH:MM AM/PM - Activity Name'. "
-            "Use **bold** to highlight the day number, date, start timing, and name of visit location only. "
+            "Use **bold** to highlight the day number, date, and start timing only. "
             "Provide transport information and weather ({weather}). "
             "User comments: {comments}",
         ),
