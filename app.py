@@ -32,49 +32,76 @@ itinerary_prompt = ChatPromptTemplate.from_messages(
             "Include start time of the activities in the format: 'HH:MM AM/PM - Activity Name'. "
             "Use **bold** to highlight the day number, date, start timing, and name of visit location only. "
             "Provide transport information and weather ({weather}). "
-            "User comments: {comments}"
+            "User comments: {comments}",
         ),
         ("human", "Create an itinerary for my trip."),
     ]
 )
+
 
 # Serve HTML Pages
 @app.route("/", methods=["GET"])
 def home():
     return render_template("index.html")
 
+
 @app.route("/generate-itinerary", methods=["GET"])
 def itinerary_page():
     return render_template("generate-itinerary.html")
+
 
 @app.route("/login", methods=["GET"])
 def login_page():
     return render_template("login.html")
 
+
 @app.route("/signup", methods=["GET"])
 def signup_page():
     return render_template("signup.html")
 
+
 # Fetch Weather
 def fetch_weather(city, from_date, to_date):
     try:
+        today = datetime.today().date()
+        trip_start = datetime.strptime(from_date, "%Y-%m-%d").date()
+        is_within_7_days = (trip_start - today).days <= 7
+
         geo_url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1"
         geo_response = requests.get(geo_url, timeout=5)
         geo_data = geo_response.json()
 
         if "results" in geo_data and geo_data["results"]:
-            lat, lon = geo_data["results"][0]["latitude"], geo_data["results"][0]["longitude"]
-            url = f"https://archive-api.open-meteo.com/v1/archive?latitude={lat}&longitude={lon}&start_date={from_date}&end_date={to_date}&daily=temperature_2m_max,temperature_2m_min&timezone=auto"
+            lat, lon = (
+                geo_data["results"][0]["latitude"],
+                geo_data["results"][0]["longitude"],
+            )
+
+            if is_within_7_days:
+                url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&daily=temperature_2m_max,temperature_2m_min&timezone=auto"
+            else:
+                last_year_date = trip_start.replace(year=trip_start.year - 1)
+                url = f"https://archive-api.open-meteo.com/v1/archive?latitude={lat}&longitude={lon}&start_date={last_year_date}&end_date={last_year_date}&daily=temperature_2m_max,temperature_2m_min&timezone=auto"
+
             response = requests.get(url, timeout=5)
             data = response.json()
 
             if "daily" in data:
-                avg_max_temp = round(sum(data["daily"]["temperature_2m_max"]) / len(data["daily"]["temperature_2m_max"]), 1)
-                avg_min_temp = round(sum(data["daily"]["temperature_2m_min"]) / len(data["daily"]["temperature_2m_min"]), 1)
+                avg_max_temp = round(
+                    sum(data["daily"]["temperature_2m_max"])
+                    / len(data["daily"]["temperature_2m_max"]),
+                    1,
+                )
+                avg_min_temp = round(
+                    sum(data["daily"]["temperature_2m_min"])
+                    / len(data["daily"]["temperature_2m_min"]),
+                    1,
+                )
                 return f"Avg Max Temp: {avg_max_temp}°C, Avg Min Temp: {avg_min_temp}°C"
-        return ""
     except:
-        return ""
+        print("Weather API failed. Skipping weather data.")
+    return ""
+
 
 # API Endpoint: Generate Itinerary
 @app.route("/api/generate-itinerary", methods=["POST"])
@@ -108,6 +135,7 @@ def generate_itinerary():
     response_text = response.content
     return jsonify({"itinerary": response.content, "weather": weather})
 
+
 # API Endpoint: Chatbot
 @app.route("/api/chat", methods=["POST"])
 def chat():
@@ -120,6 +148,7 @@ def chat():
     )
 
     return jsonify({"response": chat_response.content})
+
 
 if __name__ == "__main__":
     print(app.url_map)
