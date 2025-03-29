@@ -110,6 +110,9 @@
             <label for="to_date">End Date:</label>
             <input type="date" id="to_date" required>
 
+            <label for="comments">Additional Comments:</label>
+            <input type="text" id="comments" placeholder="Any preferences or special requests">
+
             <button type="submit">Generate Itinerary</button>
         </form>
 
@@ -150,6 +153,7 @@
             const people = document.getElementById("people").value;
             const from_date = document.getElementById("from_date").value;
             const to_date = document.getElementById("to_date").value;
+            const comments = document.getElementById("comments").value;
 
             document.getElementById("output").innerHTML = "<p>Generating itinerary...</p>";
 
@@ -157,20 +161,19 @@
                 const response = await fetch("/api/generate-itinerary", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ city, interests, budget, people, from_date, to_date })
+                    body: JSON.stringify({ city, interests, budget, people, from_date, to_date, comments })
                 });
 
                 const data = await response.json();
                 generatedItinerary = data.itinerary || "No itinerary generated.";
 
                 const formattedItinerary = generatedItinerary.split("\n").filter(line => line.trim() !== "").map(line => {
-                    // Match time only once at the beginning
                     const timeMatch = line.match(/^(\d{1,2}:\d{2} [APap][Mm])\b/);
                     if (timeMatch) {
-                        line = line.replace(timeMatch[0], "").trim(); // Remove duplicate time from text
+                        line = line.replace(timeMatch[0], "").trim();
                         return `<div class='itinerary-item'><strong>${timeMatch[0]}</strong> ${line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`;
                     }
-                    return `<div class='itinerary-item'>${line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`; // Convert **text** to <strong>text</strong>
+                    return `<div class='itinerary-item'>${line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>`;
                 }).join("");
 
                 document.getElementById("output").innerHTML = `<h3>Your Itinerary:</h3>${formattedItinerary}`;
@@ -205,6 +208,7 @@
                 console.error("Chatbot error:", error);
             }
         }
+
     </script>
 </body>
 </html>
