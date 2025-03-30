@@ -33,12 +33,11 @@ itinerary_prompt = ChatPromptTemplate.from_messages(
             "Format each day like this:\n\n"
             "**Day 1: Monday, June 10**\n"
             "08:00 AM - Breakfast at local cafe\n"
-            "10:00 AM - Visit City Museum\n"
-            "12:30 PM - Lunch at recommended restaurant\n\n"
+            "10:00 AM - Visit City Museum\n\n"
             "Include transportation details between locations when relevant. "
             "Consider the weather: {weather}. "
             "User interests: {interests}. "
-            "Additional comments: {comments}"
+            "Additional comments: {comments}."
         ),
         ("human", "Create an itinerary for my trip."),
     ]
@@ -137,7 +136,7 @@ def generate_itinerary():
 
     return jsonify({"itinerary": response.content, "weather": weather})
 
-# API Endpoint: Replace Activity
+# API Endpoint: Replace Activity (used for regeneration)
 @app.route("/api/replace-activity", methods=["POST"])
 def replace_activity():
     data = request.json
@@ -145,7 +144,6 @@ def replace_activity():
     new_activity = data["new_activity"]
     current_itinerary = data["current_itinerary"]
 
-    # Generate updated itinerary
     response = llm.invoke(
         replace_activity_prompt.format_messages(
             original_time=original_time,
@@ -170,5 +168,4 @@ def chat():
     return jsonify({"response": chat_response.content})
 
 if __name__ == "__main__":
-    print(app.url_map)
     app.run(debug=True)
