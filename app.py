@@ -27,15 +27,34 @@ itinerary_prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "You are a helpful travel assistant. Create a structured travel itinerary for {city} "
-            "from {from_date} to {to_date} for {people} people with a budget of {budget} INR each."
-            "Consider the weather as well."
-            "Include start time of the activities in the format: 'HH:MM AM/PM - Activity Name'. "
-            "Use **bold** to highlight the day number, date, and start timing only. "
-            "Provide transport information. "
-            "User comments: {comments}",
+            "You are a helpful travel assistant. Create a detailed travel itinerary for {city} "
+            "from {from_date} to {to_date} for {people} people with a budget of {budget} INR each. "
+            "The itinerary should be organized by days with clear time slots. "
+            "Format each day like this:\n\n"
+            "**Day 1: Monday, June 10**\n"
+            "08:00 AM - Breakfast at local cafe\n"
+            "10:00 AM - Visit City Museum\n"
+            "12:30 PM - Lunch at recommended restaurant\n\n"
+            "Include transportation details between locations when relevant. "
+            "Consider the weather: {weather}. "
+            "User interests: {interests}. "
+            "Additional comments: {comments}"
         ),
         ("human", "Create an itinerary for my trip."),
+    ]
+)
+
+replace_activity_prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            "You are a travel assistant modifying an existing itinerary. The user wants to replace "
+            "the activity at {original_time} with '{new_activity}'. Please update the itinerary "
+            "while keeping all other activities the same. Make sure the new activity fits with "
+            "the rest of the schedule and maintains logical flow. Return the complete updated itinerary "
+            "with the same formatting as before."
+        ),
+        ("human", "Current itinerary:\n{current_itinerary}\n\nPlease make the change."),
     ]
 )
 
@@ -92,7 +111,7 @@ def fetch_weather(city, from_date, to_date):
 def generate_itinerary():
     data = request.json
     city = data["city"]
-    interests = data["interests"]
+    interests = ", ".join(data["interests"])
     budget = data["budget"]
     people = data["people"]
     from_date = datetime.strptime(data["from_date"], "%Y-%m-%d").strftime("%d-%m-%Y")
@@ -106,7 +125,7 @@ def generate_itinerary():
     response = llm.invoke(
         itinerary_prompt.format_messages(
             city=city,
-            interests=", ".join(interests),
+            interests=interests,
             budget=budget,
             people=people,
             from_date=from_date,
@@ -117,6 +136,25 @@ def generate_itinerary():
     )
 
     return jsonify({"itinerary": response.content, "weather": weather})
+
+# API Endpoint: Replace Activity
+@app.route("/api/replace-activity", methods=["POST"])
+def replace_activity():
+    data = request.json
+    original_time = data["original_time"]
+    new_activity = data["new_activity"]
+    current_itinerary = data["current_itinerary"]
+
+    # Generate updated itinerary
+    response = llm.invoke(
+        replace_activity_prompt.format_messages(
+            original_time=original_time,
+            new_activity=new_activity,
+            current_itinerary=current_itinerary
+        )
+    )
+
+    return jsonify({"new_itinerary": response.content})
 
 # API Endpoint: Chatbot
 @app.route("/api/chat", methods=["POST"])

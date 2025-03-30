@@ -6,12 +6,229 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Tangled Travels</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-plum: #5A2D82;
+            --royal-violet: #7B3FBF;
+            --electric-violet: #9B30FF;
+            --soft-lavender: #D8BFD8;
+            --misty-lilac: #E6E6FA;
+            --dark-bg: #121212;
+            --light-bg: #1E1E1E;
+            --pure-white: #FFFFFF;
+            --light-gray: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-gray);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--deep-plum), var(--royal-violet));
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--pure-white);
+            font-size: 2.5rem;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin: 0;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--pure-white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        main {
+            margin-top: 80px;
+        }
+
+        .hero {
+            position: relative;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--pure-white);
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px rgba(123, 63, 191, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            color: var(--soft-lavender);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--royal-violet), var(--electric-violet));
+            color: var(--pure-white);
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(123, 63, 191, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(123, 63, 191, 0.6);
+        }
+
+        .features {
+            padding: 5rem 2rem;
+            background: var(--light-bg);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--pure-white);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--royal-violet), var(--electric-violet));
+            margin: 1rem auto 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--royal-violet);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(123, 63, 191, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--electric-violet);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            color: var(--pure-white);
+            margin-bottom: 1rem;
+        }
+
+        .feature-desc {
+            color: var(--light-gray);
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--deep-plum), var(--royal-violet));
+            color: var(--pure-white);
+            text-align: center;
+            padding: 2rem;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <header>
-        <div class="logo">UnTangled</div>
         <nav>
+            <div class="logo">UnTangled</div>
             <ul class="nav-links">
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('itinerary_page') }}">Generate Itinerary</a></li>
@@ -24,18 +241,38 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1>Embark on Your Enchanted Journey</h1>
-                <p>Discover personalized travel itineraries with UnTangled.</p>
-                <a href="{{ url_for('signup_page') }}" class="cta-button">Get Started</a>
+                <h1>Embark on Your Perfect Journey</h1>
+                <p>Let UnTangled craft your personalized travel itinerary with magical precision</p>
+                <a href="{{ url_for('signup_page') }}" class="cta-button">Begin Your Adventure</a>
             </div>
         </section>
 
-
+        <section class="features">
+            <div class="features-container">
+                <h2 class="section-title">Why Choose UnTangled?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">✈️</div>
+                        <h3 class="feature-title">Tailored Itineraries</h3>
+                        <p class="feature-desc">Get personalized travel plans crafted just for your interests, budget, and preferences.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <h3 class="feature-title">Time Optimization</h3>
+                        <p class="feature-desc">Smart scheduling that maximizes your experience while minimizing travel time.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💎</div>
+                        <h3 class="feature-title">Local Secrets</h3>
+                        <p class="feature-desc">Discover hidden gems and local favorites you won't find in guidebooks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2025 UnTangled. All rights reserved.</p>
     </footer>
 </body>
-
 </html>

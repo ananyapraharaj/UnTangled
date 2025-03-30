@@ -5,6 +5,260 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - UnTangled</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-plum: #5A2D82;
+            --royal-violet: #7B3FBF;
+            --electric-violet: #9B30FF;
+            --soft-lavender: #D8BFD8;
+            --misty-lilac: #E6E6FA;
+            --dark-bg: #121212;
+            --light-bg: #1E1E1E;
+            --pure-white: #FFFFFF;
+            --light-gray: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-gray);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--deep-plum), var(--royal-violet));
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            color: var(--pure-white);
+            font-size: 2.5rem;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin: 0;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--pure-white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-links .active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(rgba(18, 18, 18, 0.9), rgba(18, 18, 18, 0.9)), 
+                        url('https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .form-container {
+            background: var(--light-bg);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--royal-violet);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .form-container h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--pure-white);
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(123, 63, 191, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--soft-lavender);
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--royal-violet);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--pure-white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--electric-violet);
+            box-shadow: 0 0 0 2px rgba(155, 48, 255, 0.3);
+        }
+
+        .password-strength {
+            height: 4px;
+            background: var(--light-bg);
+            margin-top: 0.5rem;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            background: #f44336;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--royal-violet), var(--electric-violet));
+            color: var(--pure-white);
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .form-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(123, 63, 191, 0.4);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--light-gray);
+        }
+
+        .form-footer a {
+            color: var(--soft-lavender);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .form-footer a:hover {
+            color: var(--electric-violet);
+            text-decoration: underline;
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--deep-plum), var(--royal-violet));
+            color: var(--pure-white);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .form-container {
+                padding: 2rem;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('signup-password');
+            const strengthBar = document.createElement('div');
+            strengthBar.className = 'password-strength-bar';
+            const strengthContainer = document.createElement('div');
+            strengthContainer.className = 'password-strength';
+            strengthContainer.appendChild(strengthBar);
+            passwordInput.parentNode.insertBefore(strengthContainer, passwordInput.nextSibling);
+
+            passwordInput.addEventListener('input', function() {
+                const strength = calculatePasswordStrength(this.value);
+                strengthBar.style.width = strength.percentage + '%';
+                strengthBar.style.backgroundColor = strength.color;
+            });
+
+            function calculatePasswordStrength(password) {
+                let strength = 0;
+                if (password.length > 0) strength += 10;
+                if (password.length >= 8) strength += 30;
+                if (/[A-Z]/.test(password)) strength += 20;
+                if (/[0-9]/.test(password)) strength += 20;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 20;
+
+                let color;
+                if (strength < 30) color = '#f44336';
+                else if (strength < 70) color = '#ff9800';
+                else color = '#4CAF50';
+
+                return { percentage: strength, color: color };
+            }
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -24,23 +278,25 @@
             <form action="{{ url_for('signup_page') }}" method="POST">
                 <div class="form-group">
                     <label for="signup-name">Full Name</label>
-                    <input type="text" id="signup-name" name="name" required>
+                    <input type="text" id="signup-name" name="name" required placeholder="Enter your full name">
                 </div>
                 <div class="form-group">
                     <label for="signup-email">Email Address</label>
-                    <input type="email" id="signup-email" name="email" required>
+                    <input type="email" id="signup-email" name="email" required placeholder="Enter your email">
                 </div>
                 <div class="form-group">
                     <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" name="password" required>
+                    <input type="password" id="signup-password" name="password" required placeholder="Create a password">
                 </div>
                 <div class="form-group">
                     <label for="signup-confirm-password">Confirm Password</label>
-                    <input type="password" id="signup-confirm-password" name="confirm_password" required>
+                    <input type="password" id="signup-confirm-password" name="confirm_password" required placeholder="Confirm your password">
                 </div>
                 <button type="submit" class="form-button">Sign Up</button>
+                <div class="form-footer">
+                    <p>Already have an account? <a href="{{ url_for('login_page') }}">Log in here</a></p>
+                </div>
             </form>
-            <p>Already have an account? <a href="{{ url_for('login_page') }}">Log in here</a></p>
         </section>
     </main>
     <footer>

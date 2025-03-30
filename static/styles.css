@@ -1,156 +1,118 @@
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
 
 /* Root Variables */
 :root {
     --deep-plum: #5A2D82;
-    /* Deep mystical purple */
     --royal-violet: #7B3FBF;
-    /* Rich, royal purple */
     --electric-violet: #9B30FF;
-    /* Bright electric purple */
     --soft-lavender: #D8BFD8;
-    /* Soft pastel purple */
     --misty-lilac: #E6E6FA;
-    /* Ethereal, light purple */
-    --pale-ivory: #FAF8F5;
-    /* Soft neutral background */
-    --shadow-gray: #6D6A75;
-    /* Text contrast */
+    --dark-bg: #121212;
+    --light-bg: #1E1E1E;
     --pure-white: #FFFFFF;
-    /* Crisp white for buttons */
+    --light-gray: #E0E0E0;
 }
 
 /* Global Styles */
 body {
-    font-family: 'Lato', sans-serif;
-    background-color: var(--misty-lilac);
-    color: var(--shadow-gray);
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--light-gray);
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    line-height: 1.6;
 }
 
-/* 🌟 Header (Now on All Pages) */
 header {
-    background: linear-gradient(to bottom, var(--deep-plum), var(--royal-violet));
-    padding: 2.5rem 0;
+    background: linear-gradient(135deg, var(--deep-plum), var(--royal-violet));
+    padding: 2rem 0;
     text-align: center;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    width: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     position: relative;
+    z-index: 10;
 }
 
-/* Logo Style */
 .logo {
     color: var(--pure-white);
-    font-size: 3.2rem;
+    font-size: 2.8rem;
     font-family: 'Playfair Display', serif;
-    letter-spacing: 1.2px;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    padding: 0.5rem 0;
 }
 
-/* Navigation */
 .nav-links {
     list-style: none;
     padding: 0;
     margin: 1rem 0 0;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .nav-links li {
-    margin: 0 1.5rem;
+    margin: 0 1.2rem;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: var(--soft-lavender);
-    font-size: 1.2rem;
-    transition: opacity 0.3s ease, text-shadow 0.3s ease;
-    font-weight: 500;
+    color: var(--pure-white);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
 }
 
 .nav-links a:hover {
-    opacity: 0.8;
-    text-shadow: 0 0 5px var(--electric-violet);
+    background: rgba(255, 255, 255, 0.15);
 }
 
-/* Main Content */
-main {
-    padding: 2rem;
-    text-align: center;
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Forms */
-.form-container {
-    background: var(--misty-lilac);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    max-width: 420px;
-    margin: 2rem auto;
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
-.form-container h2 {
-    margin-bottom: 1.5rem;
-    color: var(--deep-plum);
-    font-family: 'Playfair Display', serif;
-}
-
-/* Input Fields */
-.form-group {
-    margin-bottom: 1.5rem;
-    text-align: left;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--shadow-gray);
-}
-
-.form-group input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--deep-plum);
-    border-radius: 8px;
-    font-size: 1rem;
-    background: var(--pure-white);
-    color: var(--shadow-gray);
-}
-
-/* ✨ White Magical Button */
-.form-button {
-    background: var(--pure-white);
-    color: var(--deep-plum);
-    border: 2px solid var(--deep-plum);
-    padding: 0.8rem 1.8rem;
-    border-radius: 12px;
-    font-size: 1.3rem;
-    cursor: pointer;
-    transition: all 0.4s ease-in-out;
-    font-weight: 600;
-    position: relative;
-    box-shadow: 0 0 12px rgba(90, 45, 130, 0.2);
-}
-
-/* ✨ Hover Glow Effect */
-.form-button:hover {
-    background: var(--pure-white);
-    color: var(--electric-violet);
-    border-color: var(--electric-violet);
-    box-shadow: 0 0 15px rgba(155, 48, 255, 0.6);
-    transform: scale(1.05);
-}
-
-/* Footer */
-footer {
-    background: var(--royal-violet);
-    color: var(--pale-ivory);
-    text-align: center;
-    padding: 1rem 0;
-    margin-top: 2rem;
-    font-size: 1.1rem;
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 1.5rem;
+    }
+    
+    .time-slot {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .time-slot-time {
+        margin-bottom: 0.5rem;
+    }
+    
+    .action-buttons {
+        margin-top: 0.8rem;
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .new-task-form input {
+        width: 100%;
+        margin-bottom: 0.8rem;
+    }
+    
+    .new-task-form div {
+        flex-direction: column;
+    }
+    
+    .new-task-form button {
+        width: 100%;
+        margin: 0.3rem 0;
+    }
 }
