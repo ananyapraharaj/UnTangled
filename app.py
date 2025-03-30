@@ -22,13 +22,14 @@ llm = ChatGroq(
     model_name="llama-3.3-70b-versatile",
 )
 
-# Prompt Template
+# Prompt Template (updated to cover every day between start and end date, inclusive)
 itinerary_prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
             "You are a helpful travel assistant. Create a detailed travel itinerary for {city} "
             "from {from_date} to {to_date} for {people} people with a budget of {budget} INR each. "
+            "Make sure to create an itinerary for every day between the start and end dates, including both the start and end dates. "
             "The itinerary should be organized by days with clear time slots. "
             "Format each day like this:\n\n"
             "**Day 1: Monday, June 10**\n"
@@ -48,10 +49,10 @@ replace_activity_prompt = ChatPromptTemplate.from_messages(
         (
             "system",
             "You are a travel assistant modifying an existing itinerary. The user wants to replace "
-            "the activity at {original_time} with '{new_activity}'. Please update the itinerary "
-            "while keeping all other activities the same. Make sure the new activity fits with "
-            "the rest of the schedule and maintains logical flow. Return the complete updated itinerary "
-            "with the same formatting as before."
+            "the activity at {original_time} with '{new_activity}'. If the new_activity value is 'suggest', "
+            "please generate a completely new, unique activity suggestion that fits the time slot, matches the user's interests and budget, "
+            "and is not already present anywhere in the itinerary. Ensure that the new activity maintains logical flow and does not repeat any other activity. "
+            "Return the complete updated itinerary with the same formatting as before."
         ),
         ("human", "Current itinerary:\n{current_itinerary}\n\nPlease make the change."),
     ]
