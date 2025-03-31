@@ -233,9 +233,16 @@
     ::-webkit-scrollbar-thumb:hover {
       background: var(--electric-violet);
     }
+    .spinner {
+      display: block;
+      margin: 0 auto;
+      animation: spin 1s linear infinite;
+    }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
   </style>
 </head>
 <body>
